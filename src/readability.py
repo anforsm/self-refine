@@ -29,7 +29,7 @@ def main(model_name, model, tokenizer):
     id = row["submission_id_v0"]
     if id in processed_programs:
       continue
-    if i > num_sampes:
+    if i >= num_sampes:
       break
     
 
