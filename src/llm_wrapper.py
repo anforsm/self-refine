@@ -7,7 +7,7 @@ model = AutoModelForCausalLM.from_pretrained(MODEL_1)
 tokenizer = AutoTokenizer.from_pretrained(MODEL_1)
 
 def call_llm(prompt, model=model, tokenizer=tokenizer):
-  max_len = 2048
+  max_len = 4096
   if len(prompt) > max_len:
     print(f"Warning: prompt is too long {len(prompt)}, truncating to {max_len}")
   tokens = tokenizer.encode(prompt[-1024:], return_tensors="pt").to(device)
