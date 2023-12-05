@@ -64,7 +64,7 @@ if __name__ == "__main__":
   parser.add_argument("--model", type=str, default="EleutherAI/gpt-neo-1.3B")
   args = parser.parse_args()
   model_name = args.model
-  model = AutoModelForCausalLM.from_pretrained(args.model)
+  model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16)
   model = model.to(device)
   tokenizer = AutoTokenizer.from_pretrained(args.model)
   main(model_name, model, tokenizer)
