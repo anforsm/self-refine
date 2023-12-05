@@ -85,10 +85,15 @@ power - word power
 All variables in the code snippet:
 '''.strip() + '\n'
 
-PROMPT_CRITIQUE = """
+PROMPT_CRITIQUE = """<s>[INST] <<SYS>>
+You are a helpful, respectful and honest assistant. Always answer as helpfully as possible.
+<</SYS>>
+
 I have some code. Can you give one suggestion to improve readability. Don't fix the code, just give a suggestion.
 
+```
 {code}
+```
 """.strip() + '\n'
 
 #PROMPT_FIX = """
@@ -101,12 +106,17 @@ I have some code. Can you give one suggestion to improve readability. Don't fix 
 #Now fix the code.
 #""".strip() + '\n'
 
-PROMPT_FIX = """
-I have some code. Can you give one suggestion to improve readability. Don't fix the code, just give a suggestion.
+PROMPT_FIX = """<s>[INST] <<SYS>>
+You are a helpful, respectful and honest assistant. Always answer as helpfully as possible.
+<</SYS>>
 
+I have some code, and a suggestion to improve the code below.
+
+```
 {code}
+```
 
 {suggestion}
 
-Now create a new version of the code considering the suggestion.
+Now implement the suggestion above and create a new version of the code. Do not answer with any text. Answer with only code. [/INST]
 """.strip() + '\n'

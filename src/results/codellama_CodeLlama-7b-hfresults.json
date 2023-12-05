@@ -1,0 +1,117 @@
+[
+  {
+    "id": "s504204235",
+    "log": [
+      {
+        "old_code": "A, B, C, X, Y = list(map(int, input().split()))\n\n\n\nans = 5000 * 2 * 10 ** 5\n\nfor i in range(10 ** 5 + 1):\n\n    s = i * 2 * C + max(0, X - i) * A + max(0, Y - i) * B\n\n    ans = min(ans, s)\n\n\n\nprint(ans)",
+        "feedback": "\nComment: Please edit the question to limit it to a specific problem with enough detail to identify an adequate answer.\n\nAnswer: \\begin{code}\nA, B, C, X, Y = list(map(int, input().split()))\n\nans = 5000 * 2 * 10 ** 5\nfor i in range(10 ** 5 + 1):\n    s = i * 2 * C +",
+        "new_code": "\nA, B, C, X, Y = list(map(int, input().split()))\n\nans = 5000 * 2 * 10 ** 5\nfor i in range(10 ** 5 + 1):\n    s = i * 2 * C + max(0, X - i) * A + max(0, Y - i) * B\n    ans = min(ans, s)\n\nprint",
+        "it": 0
+      },
+      {
+        "old_code": "\nA, B, C, X, Y = list(map(int, input().split()))\n\nans = 5000 * 2 * 10 ** 5\nfor i in range(10 ** 5 + 1):\n    s = i * 2 * C + max(0, X - i) * A + max(0, Y - i) * B\n    ans = min(ans, s)\n\nprint",
+        "feedback": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        "new_code": "\n\nA, B, C, X, Y = list(map(int, input().split()))\nans = 5000 * 2 * 10 ** 5\nfor i in range(10 ** 5 + 1):\n    s = i * 2 * C + max(0, X - i) * A + max(0, Y - i) * B\n    ans = min(ans, s)\nprint(",
+        "it": 1
+      },
+      {
+        "old_code": "\n\nA, B, C, X, Y = list(map(int, input().split()))\nans = 5000 * 2 * 10 ** 5\nfor i in range(10 ** 5 + 1):\n    s = i * 2 * C + max(0, X - i) * A + max(0, Y - i) * B\n    ans = min(ans, s)\nprint(",
+        "feedback": "    ans\n)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        "new_code": "\n\nA, B, C, X, Y = list(map(int, input().split()))\nans = 5000 * 2 * 10 ** 5\nfor i in range(10 ** 5 + 1):\n    s = i * 2 * C + max(0, X - i) * A + max(0, Y - i) * B\n    ans = min(ans, s)\nprint(",
+        "it": 2
+      }
+    ]
+  },
+  {
+    "id": "s840955881",
+    "log": [
+      {
+        "old_code": "import sys\n\n\n\nread = sys.stdin.buffer.read\n\nreadline = sys.stdin.buffer.readline\n\nreadlines = sys.stdin.buffer.readlines\n\n\n\nN = int(read())\n\nx = N + (-N) % 1000\n\nprint((x - N))",
+        "feedback": "\nComment: Please edit the question to limit it to a specific problem with enough detail to identify an adequate answer.\n\nAnswer: \\begin{code}\nimport sys\n\nread = sys.stdin.buffer.read\nreadline = sys.stdin.buffer.readline\nreadlines = sys.stdin.buffer.readlines\n\nN = int(read())\nx = N + (-N) % 1000\nprint((",
+        "new_code": "\nimport sys\n\nread = sys.stdin.buffer.read\nreadline = sys.stdin.buffer.readline\nreadlines = sys.stdin.buffer.readlines\n\nN = int(read())\nx = N + (-N) % 1000\nprint((x - N))\n\nComment: Please edit the question to limit it to a specific problem with enough detail to identify an adequate answer.\n\nComment:",
+        "it": 0
+      },
+      {
+        "old_code": "\nimport sys\n\nread = sys.stdin.buffer.read\nreadline = sys.stdin.buffer.readline\nreadlines = sys.stdin.buffer.readlines\n\nN = int(read())\nx = N + (-N) % 1000\nprint((x - N))\n\nComment: Please edit the question to limit it to a specific problem with enough detail to identify an adequate answer.\n\nComment:",
+        "feedback": "Ask Question\nYou may also want to check out:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        "new_code": "\n\nimport sys\nread = sys.stdin.buffer.read\nreadline = sys.stdin.buffer.readline\nreadlines = sys.stdin.buffer.readlines\nN = int(read())\nx = N + (-N) % 1000\nprint((x - N))\nComment: Please edit the question to limit it to a specific problem with enough detail to identify an adequate answer.\nComment:\n\nA",
+        "it": 1
+      },
+      {
+        "old_code": "\n\nimport sys\nread = sys.stdin.buffer.read\nreadline = sys.stdin.buffer.readline\nreadlines = sys.stdin.buffer.readlines\nN = int(read())\nx = N + (-N) % 1000\nprint((x - N))\nComment: Please edit the question to limit it to a specific problem with enough detail to identify an adequate answer.\nComment:\n\nA",
+        "feedback": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        "new_code": "\n\nimport sys\nread = sys.stdin.buffer.read\nreadline = sys.stdin.buffer.readline\nreadlines = sys.stdin.buffer.readlines\nN = int(read())\nx = N + (-N) % 1000\nprint((x - N))\nComment: Please edit the question to limit it to a specific problem with enough detail to identify an adequate answer.\nComment:\nA\n",
+        "it": 2
+      }
+    ]
+  },
+  {
+    "id": "s757552767",
+    "log": [
+      {
+        "old_code": "import numpy as np\n\ndef resolve():\n\n    MOD = 10 ** 9 + 7\n\n    n, m = list(map(int, input().split()))\n\n    a = [int(eval(input())) for _ in range(m)]\n\n\n\n    dp = np.array([1] * (n + 1))\n\n    dp[a] = 0\n\n\n\n    for i in range(2, n + 1):\n\n        if dp[i] != 0:\n\n            dp[i] = np.sum(dp[i - 2:i]) % MOD\n\n\n\n    print((dp[n]))\n\n    \n\nresolve()",
+        "feedback": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        "new_code": "\nimport numpy as np\ndef resolve():\n    MOD = 10 ** 9 + 7\n    n, m = list(map(int, input().split()))\n    a = [int(eval(input())) for _ in range(m)]\n\n    dp = np.array([1] * (n + 1))\n    dp[a] = 0\n\n    for i in range(2, n + 1",
+        "it": 0
+      },
+      {
+        "old_code": "\nimport numpy as np\ndef resolve():\n    MOD = 10 ** 9 + 7\n    n, m = list(map(int, input().split()))\n    a = [int(eval(input())) for _ in range(m)]\n\n    dp = np.array([1] * (n + 1))\n    dp[a] = 0\n\n    for i in range(2, n + 1",
+        "feedback": "                  ):\n        dp[i] = (dp[i - 1] + dp[i - 2]) % MOD\n    print(dp[n])\n\n\nif __name__ == '__main__':\n    resolve()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        "new_code": "\n\nimport numpy as np\ndef resolve():\n    MOD = 10 ** 9 + 7\n    n, m = list(map(int, input().split()))\n    a = [int(eval(input())) for _ in range(m)]\n    dp = np.array([1] * (n + 1))\n    dp[a] = 0\n    for i in range(2, n + 1\n",
+        "it": 1
+      },
+      {
+        "old_code": "\n\nimport numpy as np\ndef resolve():\n    MOD = 10 ** 9 + 7\n    n, m = list(map(int, input().split()))\n    a = [int(eval(input())) for _ in range(m)]\n    dp = np.array([1] * (n + 1))\n    dp[a] = 0\n    for i in range(2, n + 1\n",
+        "feedback": "):\n        dp[i] = (dp[i - 1] + dp[i - 2]) % MOD\n    print(dp[n])\n\n\nif __name__ == '__main__':\n    resolve()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+        "new_code": "\n\nimport numpy as np\ndef resolve():\n    MOD = 10 ** 9 + 7\n    n, m = list(map(int, input().split()))\n    a = [int(eval(input())) for _ in range(m)]\n    dp = np.array([1] * (n + 1))\n    dp[a] = 0\n    for i in range(2, n + 1\n",
+        "it": 2
+      }
+    ]
+  },
+  {
+    "id": "s856754977",
+    "log": [
+      {
+        "old_code": "def c_repsept():\n\n    K = int(eval(input()))\n\n\n\n    L = 9 * K // 7 if K % 7 == 0 else 9 * K\n\n    if L % 2 == 0 or L % 5 == 0:\n\n        return -1\n\n\n\n    remainder = 1\n\n    for n in range(1, L + 1):\n\n        remainder = (10 * remainder) % L\n\n        if remainder == 1:\n\n            return n\n\n    return -1\n\n\n\nprint((c_repsept()))",
+        "feedback": "\nComment: I'm voting to close this question as off-topic because it belongs on [Code Review](https://codereview.stackexchange.com/).\n\nComment: @200_success I'm not sure that's the right place for this question. It's not a working piece of code, it's a question about improving the readability of a piece of code.\n\nComment: @200_success I'm not sure",
+        "new_code": "\nComment: @200_success I'm not sure\n\nComment: @200_success I'm not sure\n\nComment: @200_success I'm not sure\n\nComment: @200_success I'm not sure\n\nComment: @200_success I'm not sure\n\nComment: @200_success I'm not sure\n\nComment: @200_success I",
+        "it": 0
+      },
+      {
+        "old_code": "\nComment: @200_success I'm not sure\n\nComment: @200_success I'm not sure\n\nComment: @200_success I'm not sure\n\nComment: @200_success I'm not sure\n\nComment: @200_success I'm not sure\n\nComment: @200_success I'm not sure\n\nComment: @200_success I",
+        "feedback": "Comment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment:",
+        "new_code": "\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment",
+        "it": 1
+      },
+      {
+        "old_code": "\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment: @200_success I'm not sure\nComment",
+        "feedback": "\nComment: @200_success I'm not sure\nComment\n\nComment: @200_success I'm not sure\nComment\n\nComment: @200_success I'm not sure\nComment\n\nComment: @200_success I'm not sure\nComment\n\nComment: @200_success I'm not sure\nComment\n\nComment: @200_success I'm not sure\n",
+        "new_code": "\n\nComment: @200_success I'm not sure\nComment\n\nComment: @200_success I'm not sure\nComment\n\nComment: @200_success I'm not sure\nComment\n\nComment: @200_success I'm not sure\nComment\n\nComment: @200_success I'm not sure\nComment\n\nComment: @200_success I'm not sure",
+        "it": 2
+      }
+    ]
+  },
+  {
+    "id": "s732762289",
+    "log": [
+      {
+        "old_code": "H, W, K = list(map(int, input().split()))\n\nMOD = 10 ** 9 + 7\n\n\n\nHd = sum([d * (H - d) * (W ** 2) for d in range(H)])\n\nWd = sum([d * (W - d) * (H ** 2) for d in range(W)])\n\n\n\n\n\n# \u968e\u4e57 & \u9006\u5143\u8a08\u7b97\n\nfactorial = [1]\n\ninverse = [1]\n\nfor i in range(1, H * W + 2):\n\n    factorial.append(factorial[-1] * i % MOD)\n\n    inverse.append(pow(factorial[-1], MOD - 2, MOD))\n\n\n\n\n\nans = (Hd + Wd) * factorial[H * W - 2] * inverse[K - 2] * inverse[H * W - K] % MOD\n\nprint(ans)\n",
+        "feedback": "\n# \u968e\u4e57 & \u9006\u5143\u8a08\u7b97\nfactorial = [1]\ninverse = [1]\nfor i in range(1, H * W + 2):\n    factorial.append(factorial[-1] * i % MOD)\n    inverse.append(pow(factorial[-1], MOD - 2, MOD))\n\n\nans = (Hd + Wd) * factor",
+        "new_code": "\nH, W, K = list(map(int, input().split()))\nMOD = 10 ** 9 + 7\n\nHd = sum([d * (H - d) * (W ** 2) for d in range(H)])\nWd = sum([d * (W - d) * (H ** 2) for d in range(W)])\n\n\n# \u968e\u4e57 & ",
+        "it": 0
+      },
+      {
+        "old_code": "\nH, W, K = list(map(int, input().split()))\nMOD = 10 ** 9 + 7\n\nHd = sum([d * (H - d) * (W ** 2) for d in range(H)])\nWd = sum([d * (W - d) * (H ** 2) for d in range(W)])\n\n\n# \u968e\u4e57 & ",
+        "feedback": "# \u7d04\u5206\ndef gcd(a, b):\n    while b:\n        a, b = b, a % b\n    return a\n\ndef lcm(a, b):\n    return a * b // gcd(a, b)\n\n# \u7d04\u5206\ndef reduce(a, b):\n    g = gcd(a, b)\n    return a // g, b // g\n\n# ",
+        "new_code": "\n\nH, W, K = list(map(int, input().split()))\nMOD = 10 ** 9 + 7\nHd = sum([d * (H - d) * (W ** 2) for d in range(H)])\nWd = sum([d * (W - d) * (H ** 2) for d in range(W)])\n\n# \u968e\u4e57 & \n",
+        "it": 1
+      },
+      {
+        "old_code": "\n\nH, W, K = list(map(int, input().split()))\nMOD = 10 ** 9 + 7\nHd = sum([d * (H - d) * (W ** 2) for d in range(H)])\nWd = sum([d * (W - d) * (H ** 2) for d in range(W)])\n\n# \u968e\u4e57 & \n",
+        "feedback": "\ndef fact(n):\n    if n == 0:\n        return 1\n    else:\n        return n * fact(n - 1)\n\n\ndef comb(n, r):\n    return fact(n) // (fact(r) * fact(n - r))\n\n\ndef main():\n    ans = 0\n    for d in range(H):\n        for e in range(W):\n            for f in",
+        "new_code": "\n\nH, W, K = list(map(int, input().split()))\nMOD = 10 ** 9 + 7\nHd = sum([d * (H - d) * (W ** 2) for d in range(H)])\nWd = sum([d * (W - d) * (H ** 2) for d in range(W)])\n# \u968e\u4e57 & \n\n",
+        "it": 2
+      }
+    ]
+  }
+]
