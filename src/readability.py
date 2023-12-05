@@ -6,11 +6,12 @@ from tqdm import tqdm
 import json
 import argparse
 from transformers import AutoModelForCausalLM, AutoTokenizer 
+import transformers
 import torch
 
 from readability_prompts import COUNT_VAR_PROMPT, PROMPT_CRITIQUE, PROMPT_FIX
 
-def self_refine(code, model, tokenizer):
+def self_refine(code, model, tokenizer, pipeline=None):
   debug = True
   code = code.replace("\n\n", "\n")
   code_prompt = PROMPT_CRITIQUE.format(code=code)
@@ -18,7 +19,7 @@ def self_refine(code, model, tokenizer):
   if debug:
     print("---------------")
     print(code_prompt)
-  feedback = call_llm(code_prompt, model, tokenizer)
+  feedback = call_llm(code_prompt, model, tokenizer, pipeline)
   if debug:
     print("---------------")
     print(feedback)
@@ -26,7 +27,7 @@ def self_refine(code, model, tokenizer):
   if debug:
     print("---------------")
     print(fix_code_prompt)
-  new_code = call_llm(fix_code_prompt, model, tokenizer)
+  new_code = call_llm(fix_code_prompt, model, tokenizer, pipeline)
   if debug:
     print("---------------")
     print(new_code)
@@ -34,7 +35,7 @@ def self_refine(code, model, tokenizer):
   return feedback, new_code.strip()
   
 
-def main(model_name, model, tokenizer):
+def main(model_name, model, tokenizer, pipeline=None):
   programs = pd.read_json("data/code_samples/codenet-python-test-1k.jsonl", lines=True, orient="records")
   results = []
   processed_programs = set()
@@ -53,7 +54,7 @@ def main(model_name, model, tokenizer):
 
     result = []
     for it in range(3):
-      feedback, new_code = self_refine(code, model, tokenizer)
+      feedback, new_code = self_refine(code, model, tokenizer, pipeline)
 
       result.append({
         "old_code": code,
@@ -78,7 +79,14 @@ if __name__ == "__main__":
   parser.add_argument("--model", type=str, default="EleutherAI/gpt-neo-1.3B")
   args = parser.parse_args()
   model_name = args.model
-  model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16)
-  model = model.to(device)
+  #model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16)
+  #model = model.to(device)
+  model = None
+  pipeline = transformers.pipeline(
+    "text-generation",
+    model=model_name,
+    torch_dtype=torch.float16,
+    device_map="auto",
+  )
   tokenizer = AutoTokenizer.from_pretrained(args.model)
-  main(model_name, model, tokenizer)
+  main(model_name, model, tokenizer, pipeline=pipeline)
