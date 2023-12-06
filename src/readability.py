@@ -42,8 +42,8 @@ def main(model_name, model, tokenizer, pipeline=None):
   programs = pd.read_json("data/code_samples/codenet-python-test-1k.jsonl", lines=True, orient="records")
   results = []
   processed_programs = set()
-  num_sampes = len(programs)
-  #num_sampes = 50
+  #num_sampes = len(programs)
+  num_sampes = 50
   for i, row in tqdm(programs.iterrows(), total=num_sampes):
     id = row["submission_id_v0"]
     if id in processed_programs:
