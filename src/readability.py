@@ -89,7 +89,7 @@ if __name__ == "__main__":
   pipeline = transformers.pipeline(
     "text-generation",
     model=model_name,
-    torch_dtype=torch.float16,
+    #torch_dtype=torch.float16,
     device_map="auto",
   )
   tokenizer = AutoTokenizer.from_pretrained(args.model)
