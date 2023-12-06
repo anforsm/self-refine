@@ -12,27 +12,30 @@ import torch
 from readability_prompts import COUNT_VAR_PROMPT, PROMPT_CRITIQUE, PROMPT_FIX
 
 def self_refine(code, model, tokenizer, pipeline=None):
-  debug = True
+  debug = False 
   code = code.replace("\n\n", "\n")
   code_prompt = PROMPT_CRITIQUE.format(code=code)
+  debug_stats = {}
   #feedback = call_openai(code_prompt)
   if debug:
     print("---------------")
     print(code_prompt)
   feedback = call_llm(code_prompt, model, tokenizer, pipeline)
+  debug_stats["code_prompt"] = code_prompt
   if debug:
     print("---------------")
     print(feedback)
   fix_code_prompt = PROMPT_FIX.format(code=code, suggestion=feedback)
+  debug_stats["fix_code_prompt"] = fix_code_prompt
   if debug:
     print("---------------")
     print(fix_code_prompt)
-  new_code = call_llm(fix_code_prompt, model, tokenizer, pipeline)
+  new_code = call_llm(fix_code_prompt, model, tokenizer, pipeline, extract_code=True)
   if debug:
     print("---------------")
     print(new_code)
   #new_code = call_openai(fix_code_prompt)
-  return feedback, new_code.strip()
+  return feedback, new_code.strip(), debug_stats
   
 
 def main(model_name, model, tokenizer, pipeline=None):
@@ -54,13 +57,14 @@ def main(model_name, model, tokenizer, pipeline=None):
 
     result = []
     for it in range(3):
-      feedback, new_code = self_refine(code, model, tokenizer, pipeline)
+      feedback, new_code, debug_stats = self_refine(code, model, tokenizer, pipeline)
 
       result.append({
         "old_code": code,
         "feedback": feedback,
         "new_code": new_code,
         "it": it,
+        "debug_stats": debug_stats
       })
 
       code = new_code

@@ -85,16 +85,30 @@ power - word power
 All variables in the code snippet:
 '''.strip() + '\n'
 
-PROMPT_CRITIQUE = """<s>[INST] <<SYS>>
-You are a helpful, respectful and honest assistant. Always answer as helpfully as possible.
-<</SYS>>
+PROMPT_CRITIQUE = """<s>[INST]
 
+Example of code critique:
 I have some code. Can you give one suggestion to improve readability. Don't fix the code, just give a suggestion.
 
 ```
-{code}
+A, B, C, X, Y = list(map(int, input().split()))
+
+ans = 5000 * 2 * 10 ** 5
+for i in range(10 ** 5 + 1):
+    s = i * 2 * C + max(0, X - i) * A + max(0, Y - i) * B
+    ans = min(ans, s)
 ```
-""".strip() + '\n'
+
+My suggestion is to use a consistent naming convention throughout the code. The current code uses both camelCase and snake_case for variable names, which can make the code harder to read. It would be better to stick to one convention throughout the code. For example, you could use camelCase for all variable names, or snake_case for all variable names. This will make the code easier to read and understand.
+
+Finish this code critique:
+I have some code. Can you give one suggestion to improve readability. Don't fix the code, just give a suggestion.
+
+```
+{code} 
+```
+
+[/INST]""".strip() + '\n'
 
 #PROMPT_FIX = """
 #I have some code. Can you give one suggestion to improve readability. Don't fix the code, just give a suggestion.
@@ -110,6 +124,32 @@ PROMPT_FIX = """<s>[INST] <<SYS>>
 You are a helpful, respectful and honest assistant. Always answer as helpfully as possible.
 <</SYS>>
 
+Example code suggestion implementation:
+I have some code, and a suggestion to improve the code below.
+
+```
+A, B, C, X, Y = list(map(int, input().split()))
+
+ans = 5000 * 2 * 10 ** 5
+for i in range(10 ** 5 + 1):
+    s = i * 2 * C + max(0, X - i) * A + max(0, Y - i) * B
+    ans = min(ans, s)
+```
+
+My suggestion is to use a consistent naming convention throughout the code. The current code uses both camelCase and snake_case for variable names, which can make the code harder to read. It would be better to stick to one convention throughout the code. For example, you could use camelCase for all variable names, or snake_case for all variable names. This will make the code easier to read and understand.
+
+Now implement the suggestion above and create a new version of the code. Do not answer with any text. Answer with only code.
+
+```
+a, b, c, x, y = list(map(int, input().split()))
+
+ans = 5000 * 2 * 10 ** 5
+for i in range(10 ** 5 + 1):
+    s = i * 2 * c + max(0, x - i) * a + max(0, y - i) * b
+    ans = min(ans, s)
+```
+
+Finish this code suggestion implementation:
 I have some code, and a suggestion to improve the code below.
 
 ```
@@ -118,5 +158,8 @@ I have some code, and a suggestion to improve the code below.
 
 {suggestion}
 
-Now implement the suggestion above and create a new version of the code. Do not answer with any text. Answer with only code. [/INST]
+Now implement the suggestion above and create a new version of the code. Do not answer with any text. Answer with only code.
+
+```
+[/INST]
 """.strip() + '\n'
