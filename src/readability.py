@@ -43,7 +43,7 @@ def main(model_name, model, tokenizer, pipeline=None):
   results = []
   processed_programs = set()
   #num_sampes = len(programs)
-  num_sampes = 5
+  num_sampes = 50
   for i, row in tqdm(programs.iterrows(), total=num_sampes):
     id = row["submission_id_v0"]
     if id in processed_programs:
