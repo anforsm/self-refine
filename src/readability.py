@@ -20,7 +20,12 @@ def self_refine(code, model, tokenizer, pipeline=None):
   if debug:
     print("---------------")
     print(code_prompt)
-  feedback = call_llm(code_prompt, model, tokenizer, pipeline)
+
+  if model_name == "gpt-3.5" or model_name == "gpt-4":
+    feedback = call_openai(code_prompt)
+  else:
+    feedback = call_llm(code_prompt, model, tokenizer, pipeline)
+
   debug_stats["code_prompt"] = code_prompt
   if debug:
     print("---------------")
@@ -30,7 +35,10 @@ def self_refine(code, model, tokenizer, pipeline=None):
   if debug:
     print("---------------")
     print(fix_code_prompt)
-  new_code = call_llm(fix_code_prompt, model, tokenizer, pipeline, extract_code=True)
+  if model_name == "gpt-3.5" or model_name == "gpt-4":
+    new_code = call_openai(fix_code_prompt)
+  else:
+    new_code = call_llm(fix_code_prompt, model, tokenizer, pipeline, extract_code=True)
   if debug:
     print("---------------")
     print(new_code)
@@ -83,6 +91,11 @@ if __name__ == "__main__":
   parser.add_argument("--model", type=str, default="EleutherAI/gpt-neo-1.3B")
   args = parser.parse_args()
   model_name = args.model
+
+  if model_name == "gpt-3.5" or model_name == "gpt-4":
+    main(model_name, None, None)
+    exit()
+
   #model = AutoModelForCausalLM.from_pretrained(args.model, torch_dtype=torch.float16)
   #model = model.to(device)
   model = None

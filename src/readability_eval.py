@@ -8,6 +8,10 @@ from tqdm import tqdm
 import json
 import matplotlib.pyplot as plt
 
+import argparse
+
+from multiprocessing import Pool
+
 
 from readability_prompts import COUNT_VAR_PROMPT, PROMPT_CRITIQUE, PROMPT_FIX
 
@@ -36,12 +40,16 @@ def count_variables(code):
 
   return num_meaningful_vars, num_meaningful_vars / num_vars, result
 
-def run_eval():
-  with open("results_long.json", "r") as f:
+def run_eval(model_name):
+  fn = model_name.replace("/", "_")
+  with open(f"results/{fn}results.json", "r") as f:
     results = json.load(f)
   
+  evaled_indices = []
+  max_num_evals = 50
+  num_evals = 0
   remove_indices = []
-  for i, result in tqdm(enumerate(results), total=len(results)):
+  for i, result in tqdm(enumerate(results), total=max_num_evals):
     try:
       old_code = None
       for it in range(len(result["log"])):
@@ -78,16 +86,28 @@ def run_eval():
         old_num_meaningful_vars = num_meaningful_vars
         old_var_density = var_density
         old_vars = vars
+
+      num_evals += 1
+      evaled_indices.append(i)
+      if num_evals >= max_num_evals:
+        break
     except:
       remove_indices.append(i)
   
-  for i in remove_indices[::-1]:
-    results.pop(i)
+  #for i in remove_indices[::-1]:
+  #  results.pop(i)
+  #for i in range(len(results)):
+  #  if i not in evaled_indices:
+  #    results.pop(i)
+  new_results = []
+  for i in evaled_indices:
+    new_results.append(results[i])
   
-  json.dump(results, open("results_evaluated.json", "w"), indent=2)
+  json.dump(new_results, open(f"results/{fn}_evaluated.json", "w"), indent=2)
 
-def draw_graphs():
-  results = json.load(open("results_evaluated.json", "r"))
+def draw_graphs(model_name):
+  fn = model_name.replace("/", "_")
+  results = json.load(open(f"results/{fn}_evaluated.json", "r"))
   comment_ratios = []
   var_ratios = []
   func_nums = []
@@ -105,8 +125,9 @@ def draw_graphs():
   plt.legend(["Comment ratio", "Variable ratio", "Function number"])
   plt.show()
 
-def calculate_stats():
-  with open("results_evaluated.json", "r") as f:
+def calculate_stats(model_name):
+  fn = model_name.replace("/", "_")
+  with open(f"results/{fn}_evaluated.json", "r") as f:
     results = json.load(f)
 
   avg_comment_ratio = 0
@@ -143,11 +164,15 @@ def calculate_stats():
 
 
 
-def main():
-  run_eval()
-  calculate_stats()
-  draw_graphs()
+def main(model_name):
+  run_eval(model_name)
+  calculate_stats(model_name)
+  draw_graphs(model_name)
 
 
 if __name__ == "__main__":
-  main()
+  argparser = argparse.ArgumentParser()
+  argparser.add_argument("--model", type=str, required=True)
+  args = argparser.parse_args()
+  model_name = args.model
+  main(model_name)
