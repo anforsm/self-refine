@@ -53,35 +53,39 @@ def main(model_name, model, tokenizer, pipeline=None):
   #num_sampes = len(programs)
   num_sampes = 50
   for i, row in tqdm(programs.iterrows(), total=num_sampes):
-    id = row["submission_id_v0"]
-    if id in processed_programs:
-      continue
-    if i >= num_sampes:
-      break
+    try:
+      id = row["submission_id_v0"]
+      if id in processed_programs:
+        continue
+      if i >= num_sampes:
+        break
     
 
-    processed_programs.add(id)
-    code = row["input"]
+      processed_programs.add(id)
+      code = row["input"]
 
-    result = []
-    for it in range(3):
-      feedback, new_code, debug_stats = self_refine(code, model, tokenizer, pipeline)
+      result = []
+      for it in range(3):
+        feedback, new_code, debug_stats = self_refine(code, model, tokenizer, pipeline)
 
-      result.append({
-        "old_code": code,
-        "feedback": feedback,
-        "new_code": new_code,
-        "it": it,
-        "debug_stats": debug_stats
+        result.append({
+          "old_code": code,
+          "feedback": feedback,
+          "new_code": new_code,
+          "it": it,
+          "debug_stats": debug_stats
+        })
+
+        code = new_code
+
+      results.append({
+        "id": id,
+        "log": result,
       })
+    except:
+      json.dump(results, open(f"results/{model_name.replace('/', '_')}results.json", "w"), indent=2)
+      exit()
 
-      code = new_code
-
-    results.append({
-      "id": id,
-      "log": result,
-    })
-  
   json.dump(results, open(f"results/{model_name.replace('/', '_')}results.json", "w"), indent=2)
 
 if __name__ == "__main__":

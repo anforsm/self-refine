@@ -50,14 +50,23 @@ def run_eval(model_name):
   num_evals = 0
   remove_indices = []
   for i, result in tqdm(enumerate(results), total=max_num_evals):
-    try:
-      old_code = None
-      for it in range(len(result["log"])):
+    old_code = None
+    for it in range(len(result["log"])):
+      try:
         if old_code is None:
           old_code = result["log"][it]["old_code"]
           old_comment_count, old_comment_density = count_comments(old_code)
           old_num_functions = count_functions(old_code)
           old_num_meaningful_vars, old_var_density, old_vars = count_variables(old_code)
+
+        result["log"][it].update({
+          "old_comment_count": old_comment_count,
+          "old_comment_density": old_comment_density,
+          "old_num_functions": old_num_functions,
+          "old_num_meaningful_vars": old_num_meaningful_vars,
+          "old_var_density": old_var_density,
+          "old_vars": old_vars,
+        })
     
         new_code = result["log"][it]["new_code"]
         comment_count, comment_density = count_comments(new_code)
@@ -71,12 +80,7 @@ def run_eval(model_name):
           "num_meaningful_vars": num_meaningful_vars,
           "var_density": var_density,
           "vars": vars,
-          "old_comment_count": old_comment_count,
-          "old_comment_density": old_comment_density,
-          "old_num_functions": old_num_functions,
-          "old_num_meaningful_vars": old_num_meaningful_vars,
-          "old_var_density": old_var_density,
-          "old_vars": old_vars,
+          "failed": False,
         })
 
         old_code = new_code
@@ -86,13 +90,20 @@ def run_eval(model_name):
         old_num_meaningful_vars = num_meaningful_vars
         old_var_density = var_density
         old_vars = vars
+      except:
 
-      num_evals += 1
-      evaled_indices.append(i)
-      if num_evals >= max_num_evals:
+        for it2 in range(it, len(result["log"])):
+          result["log"][it2].update({
+            "failed": True,
+          })
+
         break
-    except:
-      remove_indices.append(i)
+
+
+    num_evals += 1
+    evaled_indices.append(i)
+    if num_evals >= max_num_evals:
+      break
   
   #for i in remove_indices[::-1]:
   #  results.pop(i)
@@ -166,8 +177,8 @@ def calculate_stats(model_name):
 
 def main(model_name):
   run_eval(model_name)
-  calculate_stats(model_name)
-  draw_graphs(model_name)
+  #calculate_stats(model_name)
+  #draw_graphs(model_name)
 
 
 if __name__ == "__main__":

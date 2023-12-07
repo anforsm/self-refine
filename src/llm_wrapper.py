@@ -24,12 +24,14 @@ def call_llm(prompt, model=model, tokenizer=tokenizer, pipeline=None, extract_co
       max_length=len(prompt) + 300,
     )
     s = res[0]["generated_text"][len(prompt):]
+    del res
     if extract_code:
       if "```" in s:
         start = "```"
         result = s[s.find(start) + len(start):s.rfind(start)]
         return result
     return s
+  exit()
   max_len = 4096
   if len(prompt) > max_len:
     print(f"Warning: prompt is too long {len(prompt)}, truncating to {max_len}")
