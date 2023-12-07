@@ -13,7 +13,7 @@ import argparse
 from multiprocessing import Pool
 
 
-from readability_prompts import COUNT_VAR_PROMPT, PROMPT_CRITIQUE, PROMPT_FIX
+from readability_prompts_llama import COUNT_VAR_PROMPT, PROMPT_CRITIQUE, PROMPT_FIX
 
 
 def count_comments(code):
@@ -24,6 +24,7 @@ def count_comments(code):
   for token in tokens:
     if token.type == tokenize.COMMENT:
       comment_count += 1
+
   return comment_count, comment_count / total_lines
 
 def count_functions(code):
@@ -40,21 +41,160 @@ def count_variables(code):
 
   return num_meaningful_vars, num_meaningful_vars / num_vars, result
 
-def run_eval(model_name):
+def rererun_failed(model_name):
   fn = model_name.replace("/", "_")
-  with open(f"results/{fn}results.json", "r") as f:
+  with open(f"results/{fn}_evaluated.json", "r") as f:
     results = json.load(f)
   
-  evaled_indices = []
-  max_num_evals = 50
-  num_evals = 0
-  remove_indices = []
-  for i, result in tqdm(enumerate(results), total=max_num_evals):
+  failed_indices = []
+  for i, result in enumerate(results):
+    for it in range(len(result["log"])):
+      if "failed" in result["log"][it] and result["log"][it]["failed"]:
+        failed_indices.append(i)
+        break
+  
+  def extract_code(s):
+    start = ":\n\n"
+    if start in s:
+      s= s[s.find(start) + len(start):]
+
+    start = "\n\n\n"
+    if start in s:
+      s = s[:s.find(start)]
+
+    if "```" not in s:
+      return s
+
+    start = "```"
+
+    left = s.find(start)
+    right = s.rfind(start)
+
+    if left == right:
+      print("found super special case")
+      return s[:right]
+
+    s = s[s.find(start) + len(start):s.rfind(start)]
+
+    if "```" in s:
+      s = s.replace("```", "")
+    return s.strip()
+
+  still_failed = 0
+  print(f"Rerunning {len(failed_indices)} failed programs")
+  for i in tqdm(failed_indices):
+    result = results[i]
     old_code = None
     for it in range(len(result["log"])):
       try:
         if old_code is None:
-          old_code = result["log"][it]["old_code"]
+          try:
+            old_code = result["log"][it]["old_code"]
+            old_comment_count, old_comment_density = count_comments(old_code)
+            old_num_functions = count_functions(old_code)
+            old_num_meaningful_vars, old_var_density, old_vars = count_variables(old_code)
+          except:
+            old_code = extract_code(result["log"][it]["old_code"])
+            old_comment_count, old_comment_density = count_comments(old_code)
+            old_num_functions = count_functions(old_code)
+            old_num_meaningful_vars, old_var_density, old_vars = count_variables(old_code)
+
+        result["log"][it].update({
+          "old_comment_count": old_comment_count,
+          "old_comment_density": old_comment_density,
+          "old_num_functions": old_num_functions,
+          "old_num_meaningful_vars": old_num_meaningful_vars,
+          "old_var_density": old_var_density,
+          "old_vars": old_vars,
+        })
+    
+        try:
+          new_code = result["log"][it]["new_code"]
+          comment_count, comment_density = count_comments(new_code)
+          num_functions = count_functions(new_code)
+          num_meaningful_vars, var_density, vars = count_variables(new_code)
+        except:
+          new_code = extract_code(result["log"][it]["new_code"])
+          comment_count, comment_density = count_comments(new_code)                   
+          num_functions = count_functions(new_code)                                   
+          num_meaningful_vars, var_density, vars = count_variables(new_code)
+
+        result["log"][it].update({
+          "comment_count": comment_count,
+          "comment_density": comment_density,
+          "num_functions": num_functions,
+          "num_meaningful_vars": num_meaningful_vars,
+          "var_density": var_density,
+          "vars": vars,
+          "failed": False,
+        })
+
+        old_code = new_code
+        old_comment_count = comment_count
+        old_comment_density = comment_density
+        old_num_functions = num_functions
+        old_num_meaningful_vars = num_meaningful_vars
+        old_var_density = var_density
+        old_vars = vars
+      except Exception as e:
+        print(e)
+
+        still_failed += 1
+        result["log"][it].update({
+          "error_message": str(e),
+        })
+
+        for it2 in range(it, len(result["log"])):
+          result["log"][it2].update({
+            "failed": True,
+          })
+
+        break
+
+  print(f"Still failed: {still_failed}")
+  json.dump(results, open(f"results/{fn}_evaluated.json", "w"), indent=2)
+
+
+def rerun_failed(model_name):
+  fn = model_name.replace("/", "_")
+  with open(f"results/{fn}_evaluated.json", "r") as f:
+    results = json.load(f)
+  
+  failed_indices = []
+  for i, result in enumerate(results):
+    for it in range(len(result["log"])):
+      if "failed" in result["log"][it] and result["log"][it]["failed"]:
+        failed_indices.append(i)
+        break
+  
+  def extract_code(s):
+    if "```" not in s:
+      return s
+    
+    s = s.replace("```python", "```")
+
+    start = "```"
+
+    left = s.find(start)
+    right = s.rfind(start)
+
+    if left == right:
+      if left < len(s) / 2:
+        return s[left + len(start):]
+      else:
+        return s[:right]
+
+    return s[s.find(start) + len(start):s.rfind(start)]
+
+  still_failed = 0
+  print(f"Rerunning {len(failed_indices)} failed programs")
+  for i in tqdm(failed_indices):
+    result = results[i]
+    old_code = None
+    for it in range(len(result["log"])):
+      try:
+        if old_code is None:
+          old_code = extract_code(result["log"][it]["old_code"])
           old_comment_count, old_comment_density = count_comments(old_code)
           old_num_functions = count_functions(old_code)
           old_num_meaningful_vars, old_var_density, old_vars = count_variables(old_code)
@@ -68,7 +208,80 @@ def run_eval(model_name):
           "old_vars": old_vars,
         })
     
-        new_code = result["log"][it]["new_code"]
+        new_code = extract_code(result["log"][it]["new_code"])
+        comment_count, comment_density = count_comments(new_code)
+        num_functions = count_functions(new_code)
+        num_meaningful_vars, var_density, vars = count_variables(new_code)
+
+        result["log"][it].update({
+          "comment_count": comment_count,
+          "comment_density": comment_density,
+          "num_functions": num_functions,
+          "num_meaningful_vars": num_meaningful_vars,
+          "var_density": var_density,
+          "vars": vars,
+          "failed": False,
+        })
+
+        old_code = new_code
+        old_comment_count = comment_count
+        old_comment_density = comment_density
+        old_num_functions = num_functions
+        old_num_meaningful_vars = num_meaningful_vars
+        old_var_density = var_density
+        old_vars = vars
+      except Exception as e:
+
+        still_failed += 1
+        result["log"][it].update({
+          "error_message": str(e),
+        })
+
+        for it2 in range(it, len(result["log"])):
+          result["log"][it2].update({
+            "failed": True,
+          })
+
+        break
+
+  print(f"Still failed: {still_failed}")
+  json.dump(results, open(f"results/{fn}_evaluated.json", "w"), indent=2)
+
+def run_eval(model_name):
+  fn = model_name.replace("/", "_")
+  with open(f"results/{fn}results.json", "r") as f:
+    results = json.load(f)
+  
+  evaled_indices = []
+  max_num_evals = 50
+  num_evals = 0
+  remove_indices = []
+  def extract_code(s):
+    if "```" not in s:
+      return s
+    
+    return s.rstrip("```")
+
+  for i, result in tqdm(enumerate(results), total=max_num_evals):
+    old_code = None
+    for it in range(len(result["log"])):
+      try:
+        if old_code is None:
+          old_code = extract_code(result["log"][it]["old_code"])
+          old_comment_count, old_comment_density = count_comments(old_code)
+          old_num_functions = count_functions(old_code)
+          old_num_meaningful_vars, old_var_density, old_vars = count_variables(old_code)
+
+        result["log"][it].update({
+          "old_comment_count": old_comment_count,
+          "old_comment_density": old_comment_density,
+          "old_num_functions": old_num_functions,
+          "old_num_meaningful_vars": old_num_meaningful_vars,
+          "old_var_density": old_var_density,
+          "old_vars": old_vars,
+        })
+    
+        new_code = extract_code(result["log"][it]["new_code"])
         comment_count, comment_density = count_comments(new_code)
         num_functions = count_functions(new_code)
         num_meaningful_vars, var_density, vars = count_variables(new_code)
@@ -180,7 +393,11 @@ def calculate_stats(model_name):
 
 
 def main(model_name):
-  run_eval(model_name)
+  import time
+  #run_eval(model_name)
+  #time.sleep(10)
+  rerun_failed(model_name)
+  #rererun_failed(model_name)
   #calculate_stats(model_name)
   #draw_graphs(model_name)
 

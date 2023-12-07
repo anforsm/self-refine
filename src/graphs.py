@@ -8,14 +8,38 @@ friendly_name_dict = {
   "gpt-4": "GPT-4 Turbo",
 
   "meta-llama/Llama-2-7b-chat-hf": "Llama 2 Chat 7B",
+  "TheBloke/Llama-2-7B-Chat-fp16": "Llama 2 Chat 7B (fp16)",
   "TheBloke/Llama-2-7B-Chat-AWQ": "Llama 2 Chat 7B (AWQ)",
 
-  "TheBloke/Llama-2-13B-Chat-AWQ": "Llama 2 Chat 13B (AWQ)",
+  "meta-llama/Llama-2-13b-chat-hf": "Llama 2 Chat 13B",
   "TheBloke/Llama-2-13B-Chat-fp16": "Llama 2 Chat 13B (fp16)",
+  "TheBloke/Llama-2-13B-Chat-AWQ": "Llama 2 Chat 13B (AWQ)",
 
-  "TheBloke/CodeLlama-13B-Instruct-fp16": "CodeLlama 13B Instruct (fp16)",
+  "codellama/CodeLlama-13b-Instruct-hf": "CodeLlama 13B Instruct",
+  "mistralai/Mistral-7B-Instruct-v0.1": "Mistral 7B Instruct",
+  "lmsys/vicuna-13b-v1.5": "Vicuna 13B Instruct",
 }
 
+style_dict = {
+    "gpt-4": "ro-",
+    "gpt-3.5": "mo-",
+    
+    "meta-llama/Llama-2-7b-chat-hf": "c*-",
+    "TheBloke/Llama-2-7B-Chat-fp16": "c*--",
+    "TheBloke/Llama-2-7B-Chat-AWQ": "c*:",
+
+    "meta-llama/Llama-2-13b-chat-hf": "bs-",
+    "TheBloke/Llama-2-13B-Chat-fp16": "bs--",
+    "TheBloke/Llama-2-13B-Chat-AWQ": "bs:",
+
+    "codellama/CodeLlama-13b-Instruct-hf": "gp-",
+    "mistralai/Mistral-7B-Instruct-v0.1": "yp-",
+    "lmsys/vicuna-13b-v1.5": "kp-",
+}
+
+filename_to_model_name = {}
+for model_name in friendly_name_dict.keys():
+    filename_to_model_name[f"results/{model_name.replace('/', '_')}_evaluated.json"] = model_name
 
 def model_progress(model_names):
     file_names = [f"results/{model_name.replace('/', '_')}_evaluated.json" for model_name in model_names]
@@ -47,15 +71,15 @@ def model_progress(model_names):
     plt.figure(figsize=(10, 5))
     for model_name, total_progress_per_iteration in model_to_progress.items():
         plt.plot(
-            list(total_progress_per_iteration.keys()), 
-            list(total_progress_per_iteration.values()),
-            "*-",
+            [0] + list(total_progress_per_iteration.keys()), 
+            [50] + list(total_progress_per_iteration.values()),
+            style_dict[filename_to_model_name[model_name]],
         )
         
     plt.legend([friendly_name_dict[model_name] for model_name in model_names])
     plt.xlabel("Iteration")
-    plt.ylabel("Number of Successful Runs")
-    plt.title("Model Progress")
+    plt.ylabel("Number of Successful Parses")
+    plt.title("Parsability of Model Output")
     
     plt.show()
 
@@ -104,19 +128,24 @@ def comparison_plot(model_names, aspect):
         plt.errorbar(
             list(average_per_iteration.keys()), 
             list(average_per_iteration.values()),
-            yerr=list(std_per_iteration.values()), 
-            fmt="*-",
+            #yerr=list(std_per_iteration.values()), 
+            fmt=style_dict[filename_to_model_name[model_name]],
             capsize=4,
         )
 
     plt.legend([friendly_name_dict[model_name] for model_name in model_names])
-    plt.xlabel("Iteration")
-    plt.ylabel(f"Average {aspect.replace('_', ' ').title()}")
-    plt.title(f"{aspect.replace('_', ' ').title()} Comparison")
+    plt.xlabel("Refinement Iteration")
+    plt.ylabel(f"Average {task_to_friendly_name[aspect]}")
+    plt.title(f"{task_to_friendly_name[aspect]}")
 
     plt.show()
 
 
+task_to_friendly_name = {
+    "comment_density": "Comment Density",
+    "var_density": "Density of Appropriately Named Variables",
+    "num_functions": "Number of Functions",
+}
 
 if __name__ == "__main__":
   argparser = argparse.ArgumentParser()
@@ -128,5 +157,7 @@ if __name__ == "__main__":
   # var_density
   # num_functions
 
-  #comparison_plot(model_list, "num_functions")
   model_progress(model_list)
+  comparison_plot(model_list, "comment_density")
+  comparison_plot(model_list, "var_density")
+  comparison_plot(model_list, "num_functions")

@@ -37,6 +37,7 @@ def self_refine(code, model, tokenizer, pipeline=None):
     print("---------------")
     print(fix_code_prompt)
   if model_name == "gpt-3.5" or model_name == "gpt-4":
+    out = None
     new_code = call_openai(fix_code_prompt)
   else:
     new_code, out = call_llm(fix_code_prompt, model, tokenizer, pipeline, extract_code=True)
@@ -99,7 +100,8 @@ def main(model_name, model, tokenizer, pipeline=None):
         "log": result,
       })
       json.dump(results, open(f"results/{model_name.replace('/', '_')}results.json", "w"), indent=2)
-    except:
+    except Exception as e:
+      print(e)
       json.dump(results, open(f"results/{model_name.replace('/', '_')}results.json", "w"), indent=2)
       exit()
 
