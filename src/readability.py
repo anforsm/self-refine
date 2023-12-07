@@ -65,6 +65,8 @@ def main(model_name, model, tokenizer, pipeline=None):
   #num_sampes = len(programs)
   num_sampes = 50
   for i, row in tqdm(programs.iterrows(), total=num_sampes):
+    #if i == 41:
+      #continue
     try:
       id = row["submission_id_v0"]
       if id in processed_programs:
@@ -120,7 +122,7 @@ if __name__ == "__main__":
   pipeline = transformers.pipeline(
     "text-generation",
     model=model_name,
-    torch_dtype=torch.float16,
+    #torch_dtype=torch.float16,
     device_map="auto",
   )
   tokenizer = AutoTokenizer.from_pretrained(args.model)
