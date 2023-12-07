@@ -8,6 +8,7 @@ import argparse
 from transformers import AutoModelForCausalLM, AutoTokenizer 
 import transformers
 import torch
+import os
 
 from readability_prompts import COUNT_VAR_PROMPT, PROMPT_CRITIQUE, PROMPT_FIX
 
@@ -53,9 +54,13 @@ def self_refine(code, model, tokenizer, pipeline=None):
 def main(model_name, model, tokenizer, pipeline=None):
   programs = pd.read_json("data/code_samples/codenet-python-test-1k.jsonl", lines=True, orient="records")
   results = []
+  ids = set()
   processed_programs = set()
-  previous_results = json.load(open(f"results/{model_name.replace('/', '_')}results.json", "r"))
-  ids = set([r["id"] for r in previous_results])
+  if os.path.exists(f"results/{model_name.replace('/', '_')}results.json"):
+    results = json.load(open(f"results/{model_name.replace('/', '_')}results.json", "r"))
+    print("Loaded previous results")
+    ids = set([r["id"] for r in results])
+  print("Creating new results")
   #num_sampes = len(programs)
   num_sampes = 50
   for i, row in tqdm(programs.iterrows(), total=num_sampes):
