@@ -96,6 +96,7 @@ def main(model_name, model, tokenizer, pipeline=None):
         "id": id,
         "log": result,
       })
+      json.dump(results, open(f"results/{model_name.replace('/', '_')}results.json", "w"), indent=2)
     except:
       json.dump(results, open(f"results/{model_name.replace('/', '_')}results.json", "w"), indent=2)
       exit()
