@@ -25,7 +25,7 @@ def self_refine(code, model, tokenizer, pipeline=None):
   if model_name == "gpt-3.5" or model_name == "gpt-4":
     feedback = call_openai(code_prompt)
   else:
-    feedback = call_llm(code_prompt, model, tokenizer, pipeline)
+    feedback, _ = call_llm(code_prompt, model, tokenizer, pipeline)
 
   debug_stats["code_prompt"] = code_prompt
   if debug:
