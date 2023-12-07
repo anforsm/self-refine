@@ -4,3 +4,4 @@ torchaudio
 transformers
 openai
 pandas
+accelerate
