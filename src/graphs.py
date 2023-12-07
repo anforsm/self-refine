@@ -11,6 +11,7 @@ friendly_name_dict = {
   "TheBloke/Llama-2-7B-Chat-AWQ": "Llama 2 Chat 7B (AWQ)",
 
   "TheBloke/Llama-2-13B-Chat-AWQ": "Llama 2 Chat 13B (AWQ)",
+  "TheBloke/Llama-2-13B-Chat-fp16": "Llama 2 Chat 13B (fp16)",
 
   "TheBloke/CodeLlama-13B-Instruct-fp16": "CodeLlama 13B Instruct (fp16)",
 }
@@ -76,7 +77,12 @@ def comparison_plot(model_names, aspect):
             "3": [],
         }
         for result in results:
-            aspect_per_iteration["0"].append(result["log"][0][f"old_{aspect}"])
+            try:
+                aspect_per_iteration["0"].append(result["log"][0][f"old_{aspect}"])
+            except:
+                print(result["id"])
+                print(file_name)
+                continue
             for it in range(3):
                 if not result["log"][it]["failed"]:
                     aspect_per_iteration[str(it + 1)].append(result["log"][it][aspect])
@@ -86,9 +92,6 @@ def comparison_plot(model_names, aspect):
         for it in range(4):
             average_per_iteration[str(it)] = sum(aspect_per_iteration[str(it)]) / len(aspect_per_iteration[str(it)])
 
-            print(file_name)
-            print(len(aspect_per_iteration[str(it)]))
-            print(np.std(aspect_per_iteration[str(it)]))
             std_per_iteration[str(it)] = np.std(aspect_per_iteration[str(it)]) * 0.1
     
         model_to_average[file_name] = average_per_iteration
@@ -125,5 +128,5 @@ if __name__ == "__main__":
   # var_density
   # num_functions
 
-  #comparison_plot(model_list, "var_density")
+  #comparison_plot(model_list, "num_functions")
   model_progress(model_list)

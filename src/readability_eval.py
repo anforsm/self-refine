@@ -90,7 +90,11 @@ def run_eval(model_name):
         old_num_meaningful_vars = num_meaningful_vars
         old_var_density = var_density
         old_vars = vars
-      except:
+      except Exception as e:
+
+        result["log"][it].update({
+          "error_message": str(e),
+        })
 
         for it2 in range(it, len(result["log"])):
           result["log"][it2].update({

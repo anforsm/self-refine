@@ -30,8 +30,8 @@ def call_llm(prompt, model=model, tokenizer=tokenizer, pipeline=None, extract_co
       if "```" in s:
         start = "```"
         result = s[s.find(start) + len(start):s.rfind(start)]
-        return result
-    return s
+        return result, s
+    return s, None
   exit()
   max_len = 4096
   if len(prompt) > max_len:

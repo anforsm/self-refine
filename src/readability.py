@@ -38,7 +38,11 @@ def self_refine(code, model, tokenizer, pipeline=None):
   if model_name == "gpt-3.5" or model_name == "gpt-4":
     new_code = call_openai(fix_code_prompt)
   else:
-    new_code = call_llm(fix_code_prompt, model, tokenizer, pipeline, extract_code=True)
+    new_code, out = call_llm(fix_code_prompt, model, tokenizer, pipeline, extract_code=True)
+
+  if out is not None:
+    debug_stats["out"] = out
+
   if debug:
     print("---------------")
     print(new_code)
@@ -50,6 +54,8 @@ def main(model_name, model, tokenizer, pipeline=None):
   programs = pd.read_json("data/code_samples/codenet-python-test-1k.jsonl", lines=True, orient="records")
   results = []
   processed_programs = set()
+  previous_results = json.load(open(f"results/{model_name.replace('/', '_')}results.json", "r"))
+  ids = set([r["id"] for r in previous_results])
   #num_sampes = len(programs)
   num_sampes = 50
   for i, row in tqdm(programs.iterrows(), total=num_sampes):
@@ -59,6 +65,8 @@ def main(model_name, model, tokenizer, pipeline=None):
         continue
       if i >= num_sampes:
         break
+      if id in ids:
+        continue
     
 
       processed_programs.add(id)
