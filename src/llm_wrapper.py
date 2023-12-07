@@ -26,11 +26,11 @@ def call_llm(prompt, model=model, tokenizer=tokenizer, pipeline=None, extract_co
     )
     s = res[0]["generated_text"][len(prompt):]
     del res
-    if extract_code:
-      if "```" in s:
-        start = "```"
-        result = s[s.find(start) + len(start):s.rfind(start)]
-        return result, s
+    # if extract_code:
+    #   if "```" in s:
+    #     start = "```"
+    #     result = s[s.find(start) + len(start):s.rfind(start)]
+    #     return result, s
     return s, None
   exit()
   max_len = 4096
