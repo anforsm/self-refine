@@ -56,11 +56,12 @@ def main(model_name, model, tokenizer, pipeline=None):
   results = []
   ids = set()
   processed_programs = set()
-  if os.path.exists(f"results/{model_name.replace('/', '_')}results.json"):
+  if os.path.isfile(f"results/{model_name.replace('/', '_')}results.json"):
     results = json.load(open(f"results/{model_name.replace('/', '_')}results.json", "r"))
-    print("Loaded previous results")
+    print(f"Loaded previous results {len(results)}")
     ids = set([r["id"] for r in results])
-  print("Creating new results")
+  else:
+    print("Creating new results")
   #num_sampes = len(programs)
   num_sampes = 50
   for i, row in tqdm(programs.iterrows(), total=num_sampes):
