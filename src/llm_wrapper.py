@@ -22,6 +22,7 @@ def call_llm(prompt, model=model, tokenizer=tokenizer, pipeline=None, extract_co
       num_return_sequences=1,
       eos_token_id=tokenizer.eos_token_id,
       max_length=len(prompt) + 300,
+      pad_token_id=tokenizer.eos_token_id,
     )
     s = res[0]["generated_text"][len(prompt):]
     del res
