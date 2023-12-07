@@ -85,7 +85,9 @@ power - word power
 All variables in the code snippet:
 '''.strip() + '\n'
 
-PROMPT_CRITIQUE = """
+PROMPT_CRITIQUE = """A chat between a human and an assistant.
+
+### Human:
 Example of code critique:
 I have some code. Can you give one suggestion to improve readability. Don't fix the code, just give a suggestion.
 
@@ -106,7 +108,8 @@ I have some code. Can you give one suggestion to improve readability. Don't fix 
 ```
 {code} 
 ```
-""".strip() + '\n'
+
+### Assistant:""".strip() + '\n'
 
 #PROMPT_FIX = """
 #I have some code. Can you give one suggestion to improve readability. Don't fix the code, just give a suggestion.
@@ -118,7 +121,9 @@ I have some code. Can you give one suggestion to improve readability. Don't fix 
 #Now fix the code.
 #""".strip() + '\n'
 
-PROMPT_FIX = """
+PROMPT_FIX = """A chat between a human and an assistant
+
+### Human:
 Example code suggestion implementation:
 I have some code, and a suggestion to improve the code below.
 
@@ -155,5 +160,6 @@ I have some code, and a suggestion to improve the code below.
 
 Now implement the suggestion above and create a new version of the code. Do not answer with any text. Answer with only code.
 
+### Assistant:
 ```
 """.strip() + '\n'
