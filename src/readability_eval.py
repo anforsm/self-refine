@@ -394,10 +394,11 @@ def calculate_stats(model_name):
 
 def main(model_name):
   import time
-  #run_eval(model_name)
-  #time.sleep(10)
+  run_eval(model_name)
+  time.sleep(10)
   rerun_failed(model_name)
-  #rererun_failed(model_name)
+  time.sleep(10)
+  rererun_failed(model_name)
   #calculate_stats(model_name)
   #draw_graphs(model_name)
 

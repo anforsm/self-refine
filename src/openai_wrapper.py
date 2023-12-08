@@ -10,7 +10,7 @@ def call_openai(prompt):
     #model="gpt-4-1106-preview",
     messages=[{"role": "user", "content": prompt}],
     temperature=0.01,
-    max_tokens=300,
+    max_tokens=2000,
   )
   print(response)
   print("got response from openai")
