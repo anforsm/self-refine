@@ -2,22 +2,23 @@ import json
 import matplotlib.pyplot as plt
 import argparse
 import numpy as np
+import pandas as pd
 
 friendly_name_dict = {
   "gpt-3.5": "GPT-3.5 Turbo",
   "gpt-4": "GPT-4 Turbo",
 
-  "meta-llama/Llama-2-7b-chat-hf": "Llama 2 Chat 7B",
-  "TheBloke/Llama-2-7B-Chat-fp16": "Llama 2 Chat 7B (fp16)",
-  "TheBloke/Llama-2-7B-Chat-AWQ": "Llama 2 Chat 7B (AWQ)",
+  "meta-llama/Llama-2-7b-chat-hf": "Llama 2 7B Chat",
+  "TheBloke/Llama-2-7B-Chat-fp16": "Llama 2 7B Chat (fp16)",
+  "TheBloke/Llama-2-7B-Chat-AWQ": "Llama 2 7B Chat (AWQ)",
 
-  "meta-llama/Llama-2-13b-chat-hf": "Llama 2 Chat 13B",
-  "TheBloke/Llama-2-13B-Chat-fp16": "Llama 2 Chat 13B (fp16)",
-  "TheBloke/Llama-2-13B-Chat-AWQ": "Llama 2 Chat 13B (AWQ)",
+  "meta-llama/Llama-2-13b-chat-hf": "Llama 2 13B Chat",
+  "TheBloke/Llama-2-13B-Chat-fp16": "Llama 2 13B Chat (fp16)",
+  "TheBloke/Llama-2-13B-Chat-AWQ": "Llama 2 13B Chat (AWQ)",
 
   "codellama/CodeLlama-13b-Instruct-hf": "CodeLlama 13B Instruct",
   "mistralai/Mistral-7B-Instruct-v0.1": "Mistral 7B Instruct",
-  "lmsys/vicuna-13b-v1.5": "Vicuna 13B Instruct",
+  "lmsys/vicuna-13b-v1.5": "Vicuna 13B",
 }
 
 style_dict = {
@@ -120,25 +121,57 @@ def comparison_plot(model_names, aspect):
     
         model_to_average[file_name] = average_per_iteration
         model_to_std[file_name] = std_per_iteration
-  
+
+    # create dataframe with results for each model and iteration 0 (base) and iteration 3 (final)
+    # do it by first creating a dictionary
+    dict_to_df = {
+        "model": [],
+        "base": [],
+        "final": [],
+    }
+    for model_name, average_per_iteration in model_to_average.items():
+        dict_to_df["model"].append(friendly_name_dict[filename_to_model_name[model_name]])
+        dict_to_df["base"].append(average_per_iteration["1"])
+        dict_to_df["final"].append(average_per_iteration["3"])
+    
+    # then create the dataframe
+    df = pd.DataFrame(dict_to_df)
+    # save the dataframe to a csv
+    df.to_csv(f"results/{aspect}.csv", index=False)
+    
     # plot
-    plt.figure(figsize=(10, 5))
+    # plt.figure(figsize=(10, 5))
+    # for model_name, average_per_iteration in model_to_average.items():
+    #     std_per_iteration = model_to_std[model_name]
+    #     plt.errorbar(
+    #         list(average_per_iteration.keys()), 
+    #         list(average_per_iteration.values()),
+    #         #yerr=list(std_per_iteration.values()), 
+    #         fmt=style_dict[filename_to_model_name[model_name]],
+    #         capsize=4,
+    #     )
+
+    # plt.legend([friendly_name_dict[model_name] for model_name in model_names], loc="upper left")
+    # plt.xlabel("Refinement Iteration")
+    # plt.ylabel(f"Average {task_to_friendly_name[aspect]}")
+    # plt.ylim(bottom=0)
+    # if aspect == "comment_density":
+    #     plt.ylim(top=0.4)
+    # if aspect == "var_density":
+    #     plt.ylim(top=0.8)
+    # if aspect == "num_functions":
+    #     plt.ylim(top=1)
+    # plt.title(f"{task_to_friendly_name[aspect]}")
+
+    # plt.show()
+
+    
+    # print the results
     for model_name, average_per_iteration in model_to_average.items():
         std_per_iteration = model_to_std[model_name]
-        plt.errorbar(
-            list(average_per_iteration.keys()), 
-            list(average_per_iteration.values()),
-            #yerr=list(std_per_iteration.values()), 
-            fmt=style_dict[filename_to_model_name[model_name]],
-            capsize=4,
-        )
-
-    plt.legend([friendly_name_dict[model_name] for model_name in model_names])
-    plt.xlabel("Refinement Iteration")
-    plt.ylabel(f"Average {task_to_friendly_name[aspect]}")
-    plt.title(f"{task_to_friendly_name[aspect]}")
-
-    plt.show()
+        print(f"Model: {friendly_name_dict[filename_to_model_name[model_name]]}")
+        print(f"Final Iteration: {average_per_iteration[str(3)]:.3f}")
+        print()
 
 
 task_to_friendly_name = {

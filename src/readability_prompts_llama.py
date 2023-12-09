@@ -110,16 +110,6 @@ I have some code. Can you give one suggestion to improve readability. Don't fix 
 
 [/INST]""".strip() + '\n'
 
-#PROMPT_FIX = """
-#I have some code. Can you give one suggestion to improve readability. Don't fix the code, just give a suggestion.
-#
-#{code}
-#
-#{suggestion}
-#
-#Now fix the code.
-#""".strip() + '\n'
-
 PROMPT_FIX = """<s>[INST] <<SYS>>
 You are a helpful, respectful and honest assistant. Always answer as helpfully as possible.
 <</SYS>>

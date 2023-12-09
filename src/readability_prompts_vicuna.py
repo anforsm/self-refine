@@ -111,16 +111,6 @@ I have some code. Can you give one suggestion to improve readability. Don't fix 
 
 ### Assistant:""".strip() + '\n'
 
-#PROMPT_FIX = """
-#I have some code. Can you give one suggestion to improve readability. Don't fix the code, just give a suggestion.
-#
-#{code}
-#
-#{suggestion}
-#
-#Now fix the code.
-#""".strip() + '\n'
-
 PROMPT_FIX = """A chat between a human and an assistant
 
 ### Human:

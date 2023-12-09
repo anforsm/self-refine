@@ -108,16 +108,6 @@ I have some code. Can you give one suggestion to improve readability. Don't fix 
 ```
 """.strip() + '\n'
 
-#PROMPT_FIX = """
-#I have some code. Can you give one suggestion to improve readability. Don't fix the code, just give a suggestion.
-#
-#{code}
-#
-#{suggestion}
-#
-#Now fix the code.
-#""".strip() + '\n'
-
 PROMPT_FIX = """
 Example code suggestion implementation:
 I have some code, and a suggestion to improve the code below.
